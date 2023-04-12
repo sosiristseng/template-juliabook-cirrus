@@ -1,8 +1,9 @@
-FROM ghcr.io/sosiristseng/docker-jupyterbook:0.15.1.3 as base
+FROM python:3.11.3-slim as base
 
-# Julia
 ENV JULIA_CI true
 ENV JULIA_NUM_THREADS "auto"
+# Let PythonCall use built-in python
+ENV JULIA_CONDAPKG_BACKEND "Null"
 ENV JULIA_PATH /usr/local/julia/
 ENV JULIA_DEPOT_PATH /srv/juliapkg/
 ENV PATH ${JULIA_PATH}/bin:${PATH}
@@ -14,13 +15,13 @@ WORKDIR /app
 
 # Python dependencies. e.g. matplotlib
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade --no-cache-dir pip wheel setuptools && pip install --no-cache-dir -r requirements.txt
 
 # Julia environment
-COPY Project.toml Manifest.toml ./
+COPY *.toml ./
 COPY src/ src
 
-RUN julia --color=yes --project="" -e 'import Pkg; Pkg.add("IJulia"); using IJulia; installkernel("Julia", "--project=@.")' &&\
+RUN julia --color=yes --project="" -e 'import Pkg; Pkg.add("IJulia"); import IJulia; IJulia.installkernel("Julia", "--project=@.")' &&\
 julia --color=yes --project=@. -e 'import Pkg; Pkg.instantiate(); Pkg.resolve(); Pkg.precompile()'
 
 CMD ["jupyter-book"]
