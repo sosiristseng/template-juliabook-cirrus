@@ -13,8 +13,6 @@ COPY --from=julia:1.8.5 ${JULIA_PATH} ${JULIA_PATH}
 
 FROM base
 
-WORKDIR /app
-
 # System packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends git parallel && \
@@ -28,7 +26,7 @@ RUN pip install --upgrade --no-cache-dir pip wheel setuptools && pip install --n
 COPY *.toml ./
 COPY src/ src
 
-RUN julia --color=yes --project="" -e 'import Pkg; Pkg.add("IJulia"); import IJulia; IJulia.installkernel("Julia", "--project=@.")' &&\
-julia --color=yes --project=@. -e 'import Pkg; Pkg.instantiate(); Pkg.resolve(); Pkg.precompile()'
+RUN julia --color=yes --project="" -e 'import Pkg; Pkg.add("IJulia"); Pkg.build("IJulia")' && \
+    julia --color=yes --project=@. -e 'import Pkg; Pkg.instantiate(); Pkg.resolve(); Pkg.precompile()'
 
 CMD ["jupyter-book"]

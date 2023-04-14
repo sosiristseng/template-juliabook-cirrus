@@ -53,7 +53,7 @@ jobs:
         jupyter-repo2docker
         --image-name ${{ env.IMAGE_NAME }}
         --cache-from ${{ env.IMAGE_NAME }}
-        --push --no-run --user-id 1000 --user-name jovyan
+        --push --no-run
         _sources
     - name: Add binder Dockerfile
       run: |
