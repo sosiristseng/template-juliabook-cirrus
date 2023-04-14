@@ -4,7 +4,7 @@ jupyter_book_task:
   env:
     JOBS: 1
     TIMEOUT: 600
-    # GH_TOKEN: ENCRYPTED[a83a3d33c85c1d0439cbfdb99f81551f87b7bfc3de072a36822d8019ef5f7d5a4aa6c7f47c975db2afa3a3c60f24384d]
+    GH_TOKEN: ENCRYPTED[a83a3d33c85c1d0439cbfdb99f81551f87b7bfc3de072a36822d8019ef5f7d5a4aa6c7f47c975db2afa3a3c60f24384d]
   container:
     dockerfile: .github/Dockerfile
     cpu: 1
