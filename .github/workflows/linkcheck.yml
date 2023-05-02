@@ -13,8 +13,6 @@ on:
 jobs:
   linkcheck:
     runs-on: ubuntu-latest
-    env:
-      PYTHON_VER: '3.11'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -22,10 +20,6 @@ jobs:
         uses: actions/setup-python@v4
         id: python
         with:
-          python-version: ${{ env.PYTHON_VER }}
-      - name: Disable code cell execution
-        uses: mikefarah/yq@master
-        with:
-          cmd: yq -i '.execute.execute_notebooks = "off"' 'docs/_config.yml'
+          python-version: '3.x'
       - name: Install Jupyter book and check links
         run: pipx run jupyter-book build docs/ --builder linkcheck
