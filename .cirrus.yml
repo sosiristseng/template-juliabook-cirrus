@@ -19,9 +19,9 @@ jupyter_book_task:
     --ExecutePreprocessor.kernel_name="julia-$(julia -e 'print(VERSION.major, ".", VERSION.minor)')"
     --execute --inplace ${EXTRA_ARGS}
   stats_script: cat /tmp/log
-  build_script: jupyter-book build docs/ --keep-going
   notebooks_artifacts:
     path: "docs/**"
+  build_script: jupyter-book build docs/ --keep-going
   ## Requires a repo scope access GitHub PAT encrypted to `GH_TOKEN` to push to its GitHub repo
   pages_script: |
     if [[ $CIRRUS_BRANCH == 'main' ]]; then
