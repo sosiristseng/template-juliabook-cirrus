@@ -21,7 +21,7 @@ jupyter_book_task:
   stats_script: cat /tmp/log
   build_script: jupyter-book build docs/ --keep-going
   notebooks_artifacts:
-    path: "docs/*"
+    path: "docs/"
   ## Requires a repo scope access GitHub PAT encrypted to `GH_TOKEN` to push to its GitHub repo
   pages_script: |
     if [[ $CIRRUS_BRANCH == 'main' ]]; then
