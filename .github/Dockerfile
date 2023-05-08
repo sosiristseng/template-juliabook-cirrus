@@ -1,7 +1,10 @@
-FROM python:3.11.3-slim as base
+FROM python:3.11.3-slim
 
+# Supress warnings from parallel
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
+
+# Julia config
 ENV JULIA_CI true
 ENV JULIA_NUM_THREADS "auto"
 # Let PythonCall use built-in python
@@ -10,8 +13,6 @@ ENV JULIA_PATH /usr/local/julia/
 ENV JULIA_DEPOT_PATH /srv/juliapkg/
 ENV PATH ${JULIA_PATH}/bin:${PATH}
 COPY --from=julia:1.8.5 ${JULIA_PATH} ${JULIA_PATH}
-
-FROM base
 
 # System packages
 RUN apt-get update && \
