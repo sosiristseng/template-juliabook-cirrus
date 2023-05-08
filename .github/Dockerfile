@@ -16,7 +16,7 @@ COPY --from=julia:1.8.5 ${JULIA_PATH} ${JULIA_PATH}
 
 # System packages
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends git parallel && \
+    apt-get install -y --no-install-recommends parallel && \
     rm -rf /var/lib/apt/lists/*
 
 # Python dependencies. e.g. matplotlib
