@@ -1,7 +1,5 @@
 # Template publishing Julia-kerneled Jupyter notebooks
 
-**ARCHIVED: Merged with [template-juliabook](https://github.com/sosiristseng/template-juliabook/)**
-
 Click `Use this template` button to copy this repository.
 
 See also:
