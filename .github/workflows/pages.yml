@@ -24,6 +24,6 @@ jobs:
       - name: Download notebooks
         run: wget -qO ${{ env.ARTIFACT_NAME }} https://api.cirrus-ci.com/v1/artifact/github/${{ github.repository }}/jupyter_book/${{ env.ARTIFACT_NAME }}?branch=main
       - name: Extract notebooks
-        run: unzip ${{ env.ARTIFACT_NAME }}
+        run: unzip -o ${{ env.ARTIFACT_NAME }}
       - name: Display downloaded notebooks
         run: ls -R
