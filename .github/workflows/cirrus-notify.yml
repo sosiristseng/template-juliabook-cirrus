@@ -1,6 +1,6 @@
 on:
   check_suite:
-    type: ['completed']
+    types: ['completed']
 
 name: Email about Cirrus CI failures
 jobs:
