@@ -1,0 +1,29 @@
+name: GitHub pages
+
+on:
+  check_suite:
+    types: ['completed']
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  download-artifacts:
+    name: Download cirrus artifacts
+    if: >-
+      github.event.check_suite.app.name == 'Cirrus CI'
+      && github.event.check_suite.conclusion == 'success'
+      && github.event.check_suite.head_branch == 'main'
+      && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      ARTIFACT_NAME: "notebooks.zip"
+    steps:
+      # - name: Checkout
+      #   uses: actions/checkout@v3
+      - name: Download notebooks
+        run: |
+          curl -fsSL https://api.cirrus-ci.com/v1/artifact/github/${{ github.repository }}/jupyter_book/${{ env.ARTIFACT_NAME }}?branch=main
+          unzip ${{ env.ARTIFACT_NAME }}
+      - name: Display downloaded notebooks
+        run: ls -R
