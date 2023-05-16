@@ -28,64 +28,6 @@ jobs:
         env:
           CHECK_RUN_URL: ${{ fromJson(steps.get_failed_check_run.outputs.data).check_runs[0].html_url }}
 
-  binder:
-    name: Build Binder Image
-    if: >-
-      github.event.check_suite.app.name == 'Cirrus CI'
-      && github.event.check_suite.conclusion == 'success'
-      && github.event.check_suite.head_branch == 'main'
-      && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: write
-      pull-requests: write
-    env:
-      IMAGE_NAME: ghcr.io/${{ github.repository }}:binder
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Remove existing binder dockerfile
-      run: |
-        rm -rf .binder || true
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      id: python
-      with:
-        python-version: '3.x'
-    - name: Install repo2docker
-      run: |
-        pip install -U pip setuptools wheel
-        pip install https://github.com/jupyterhub/repo2docker/archive/main.zip
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v2
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Pull Image
-      run: docker pull ${{ env.IMAGE_NAME }} || true
-    - name: Build binder image with repo2docker
-      run: >
-        jupyter-repo2docker
-        --user-id 1000 --user-name jovyan
-        --image-name ${{ env.IMAGE_NAME }}
-        --cache-from ${{ env.IMAGE_NAME }}
-        --push --no-run
-        .
-    - name: Add binder Dockerfile
-      run: |
-        mkdir -p .binder
-        echo "FROM ${{ env.IMAGE_NAME }}" > .binder/Dockerfile
-    - name: Create Pull Request
-      id: cpr
-      uses: peter-evans/create-pull-request@v5
-      with:
-        title: Binder dockerfile update
-        branch: binderfile
-        add-paths: |
-          .binder/Dockerfile
-
   jupyter-book:
     name: Jupyter Book
     if: >-
