@@ -54,17 +54,11 @@ jobs:
         id: python
         with:
           python-version: ${{ env.PYTHON_VER }}
-      - uses: syphar/restore-virtualenv@v1
-        id: cache-virtualenv
-        with:
-          requirement_files: .github/requirements.txt  # this is optional
-      - uses: syphar/restore-pip-download-cache@v1
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-        # the package installation will only be executed when the
-        # requirements-files have changed.
+          cache: 'pip'
+          cache-dependency-path: |
+            .github/requirements.txt
       - name: Install Python dependencies
         run: pip install -r .github/requirements.txt
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
       - name: Build website
         run: jupyter-book build docs/
       - name: Upload artifact for GH pages
