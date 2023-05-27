@@ -4,7 +4,7 @@ jupyter_book_task:
   env:
     JOBS: '2'
     TIMEOUT: '600'
-    EXTRA_ARGS: ""
+    EXTRA_ARGS: ''
   container:
     dockerfile: .github/Dockerfile
     cpu: 1
@@ -15,7 +15,7 @@ jupyter_book_task:
     parallel -j${JOBS} --joblog /tmp/log
     jupyter nbconvert --to notebook
     --ExecutePreprocessor.timeout=${TIMEOUT}
-    --ExecutePreprocessor.kernel_name="julia-$(julia -e 'print(VERSION.major, ".", VERSION.minor)')"
+    --ExecutePreprocessor.kernel_name=$(julia -e 'print("julia-", VERSION.major, ".", VERSION.minor)')
     --execute --inplace ${EXTRA_ARGS}
   stats_script: cat /tmp/log
   notebooks_artifacts:

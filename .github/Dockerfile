@@ -1,4 +1,4 @@
-FROM python:3.11.3-slim
+FROM python:3.11.3-slim as base
 
 # Supress warnings from parallel
 ENV LANG C.UTF-8
@@ -13,6 +13,8 @@ ENV JULIA_PATH /usr/local/julia/
 ENV JULIA_DEPOT_PATH /srv/juliapkg/
 ENV PATH ${JULIA_PATH}/bin:${PATH}
 COPY --from=julia:1.9.0 ${JULIA_PATH} ${JULIA_PATH}
+
+FROM base
 
 # System packages
 RUN apt-get update && \
