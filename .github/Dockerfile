@@ -21,13 +21,12 @@ RUN apt-get update && \
 
 # Python dependencies. e.g. matplotlib
 COPY requirements.txt ./
-RUN pip install --upgrade --no-cache-dir pip wheel setuptools && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir nbconvert -r requirements.txt
 
 # Julia environment
 COPY Project.toml Manifest.toml ./
 COPY src/ src
 
-RUN julia --color=yes --project="" -e 'import Pkg; Pkg.add("IJulia"); Pkg.build("IJulia")' && \
-    julia --color=yes --project=@. -e 'import Pkg; Pkg.instantiate(); Pkg.resolve(); Pkg.precompile()'
-
-CMD ["julia"]
+RUN julia --color=yes --project="" -e 'import Pkg; Pkg.add("IJulia")' && \
+    julia --color=yes --project=@. -e 'import Pkg; Pkg.instantiate(); Pkg.resolve(); Pkg.precompile()' && \
+    julia --color=yes --project="" -e 'import Pkg; Pkg.resolve(); Pkg.precompile();'
