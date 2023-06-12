@@ -1,5 +1,5 @@
 jupyter_book_task:
-  only_if: $CIRRUS_BRANCH == 'main' || $CIRRUS_TAG != '' || $CIRRUS_PR != ''
+  only_if: $CIRRUS_BRANCH == 'main' || $CIRRUS_BASE_BRANCH == 'main' || $CIRRUS_TAG != ''
   auto_cancellation: true
   env:
     JOBS: '2'
@@ -15,7 +15,7 @@ jupyter_book_task:
     parallel -j${JOBS} --joblog /tmp/log
     jupyter nbconvert --to notebook
     --ExecutePreprocessor.timeout=${TIMEOUT}
-    --ExecutePreprocessor.kernel_name=$(julia -e 'print("julia-", VERSION.major, ".", VERSION.minor)')
+    --ExecutePreprocessor.kernel_name=$(julia -e 'print("julia-1.",VERSION.minor)')
     --execute --inplace ${EXTRA_ARGS}
   stats_script: cat /tmp/log
   notebooks_artifacts:
